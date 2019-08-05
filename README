@@ -1,0 +1,9 @@
+deadman is a software deadman's switch. It sits as a sleeping daemon, then runs
+a command at the specified time. Stop the switch with SIGKILL: deadman ignores
+all possible signals.
+
+Usage: ./deadman.out time cmd arg...
+
+Time is in UTC, parsed as YYYY-MM-DDThh:mm:ss. Example: "2019-08-05T03:04:06".
+
+Example usage: ./deadman.out 2019-08-05T15:03:04 touch /tmp/hello
