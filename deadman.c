@@ -90,8 +90,6 @@ main(int const argc, char *const argv[])
 
 		nanosleep(&req, NULL);
 	}
-
-	return EXIT_SUCCESS;
 }
 
 static time_t
