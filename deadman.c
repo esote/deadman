@@ -48,7 +48,7 @@ static time_t	parse(char const *const);
 static time_t	mktime_tz(struct tm *const, char const *const);
 static char *	strdup(char const *const);
 static void	mkdaemon(void);
-static void	exec(char *const []);
+static int	exec(char *const []);
 
 int
 main(int const argc, char *const argv[])
@@ -85,13 +85,10 @@ main(int const argc, char *const argv[])
 
 	while (1) {
 		if (t <= time(NULL)) {
-			exec(argv+2);
-			return EXIT_SUCCESS;
+			return exec(argv+2);
 		}
 
-		if (nanosleep(&req, NULL) == -1) {
-			warn("nanosleep");
-		}
+		nanosleep(&req, NULL);
 	}
 
 	return EXIT_SUCCESS;
@@ -200,8 +197,9 @@ mkdaemon(void)
 		warnx("_SC_OPEN_MAX exceeds max fd value");
 	}
 
-	for (i = sysconf(_SC_OPEN_MAX); i >= 0; --i) {
-		if (close((int)i) == -1 && errno != EBADF && i >= STDERR_FILENO) {
+	for (; i >= 0; --i) {
+		if (close((int)i) == -1 && errno != EBADF
+			&& i >= STDERR_FILENO) {
 			warn("closing fd %ld failed", i);
 		}
 	}
@@ -210,16 +208,14 @@ mkdaemon(void)
 	errno = 0;
 }
 
-static void
+static int
 exec(char *const argv[])
 {
 	pid_t p;
 
-	if ((p = fork()) == 0) {
-		if (execvp(argv[0], argv) == -1) {
-			err(1, "exec execvp");
-		}
-	} else if (p == -1) {
-		err(1, "exec fork");
+	if ((p = fork()) == -1 || (p == 0 && execvp(argv[0], argv) == -1)) {
+		return EXIT_FAILURE;
 	}
+
+	return EXIT_SUCCESS;
 }
