@@ -32,6 +32,7 @@
 #include <unistd.h>
 
 #define FMT	"%Y-%m-%dT%H:%M:%S"
+#define USAGE	"usage: %s time cmd [arg...]"
 
 #ifdef _NSIG
 #define NUMSIGS	_NSIG
@@ -47,7 +48,7 @@ static time_t	parse(char const *const);
 static time_t	mktime_tz(struct tm *const, char const *const);
 static char *	strdup(char const *const);
 static void	mkdaemon(void);
-static void	exec(char *const argv[]);
+static void	exec(char *const []);
 
 int
 main(int const argc, char *const argv[])
@@ -56,9 +57,9 @@ main(int const argc, char *const argv[])
 	time_t t;
 
 	if (argc < 2) {
-		errx(1, "missing time");
+		errx(1, "missing time\n"USAGE, argc == 0 ? "deadman" : argv[0]);
 	} else if (argc < 3) {
-		errx(1, "missing command");
+		errx(1, "missing command\n"USAGE, argv[0]);
 	}
 
 	if ((t = parse(argv[1])) == -1) {
@@ -67,6 +68,10 @@ main(int const argc, char *const argv[])
 		} else {
 			errx(1, "time parsing failed");
 		}
+	}
+
+	if (strlen(argv[2]) == 0 || argv[2][0] != '/') {
+		errx(1, "command must be an absolute path");
 	}
 
 	req.tv_sec = 1;

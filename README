@@ -1,9 +1,46 @@
-deadman is a software deadman's switch. It sits as a sleeping daemon, then runs
-a command at the specified time. Stop the switch with SIGKILL: deadman ignores
-all possible signals.
+NAME
+	deadman - software deadman's switch
 
-Usage: ./deadman.out time cmd arg...
+SYNOPSIS
+	deadman time cmd [arg...]
 
-Time is in UTC, parsed as YYYY-MM-DDThh:mm:ss. Example: "2019-08-05T03:04:06".
+DESCRIPTION
+	deadman is a software deadman's switch. It sits as a sleeping daemon,
+	then runs a command at the specified time.
 
-Example usage: ./deadman.out 2019-08-05T15:03:04 touch /tmp/hello
+	Stop the switch by sending the SIGKILL signal, since deadman ignores all
+	possible signals and SIGKILL cannot be ignored.
+
+	Time is in UTC, parsed in the format "YYYY-MM-DDThh:mm:ss" similar to
+	ISO 8601. For example: "2019-08-05T15:35:00".
+
+	Command must be an absolute path starting with "/".
+
+NOTES
+	While deadman tries to position itself to avoid interruption by the
+	system, it does not go to the extent that some malware does, like
+	modifying the system to avoid detection.
+
+	Be aware that:
+
+	* On Linux, if /proc is not mounted with hidepid=2, unprivileged users
+	may see the time and command deadman will run.
+
+	* If the OS does not have DoS limits in place it could be possible for
+	other processes to consume all system resources and deadman would be
+	unable to execute the command. In such a scenario, the OS may
+	automatically kill deadman to reappropriate resources.
+
+	* When the system loses power (through shutdown, pulling the cord, etc)
+	deadman will be killed with everything else.
+
+	* Users such as root or those in the wheel group may kill or alter
+	deadman's execution.
+
+AUTHORS
+	deadman was written by Esote.
+
+COPYRIGHT
+	Copyright (c) 2019 Esote. There is NO warranty. You may redistribute
+	this software under the terms of the GNU Affero General Public License.
+	For more information, see the LICENSE file.

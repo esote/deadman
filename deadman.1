@@ -1,0 +1,103 @@
+.\"
+.\" Copyright (C) 2019  Esote
+.\"
+.\" This program is free software: you can redistribute it and/or modify
+.\" it under the terms of the GNU Affero General Public License as published
+.\" by the Free Software Foundation, either version 3 of the License, or
+.\" (at your option) any later version.
+.\"
+.\" This program is distributed in the hope that it will be useful,
+.\" but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\" MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+.\" GNU Affero General Public License for more details.
+.\"
+.\" You should have received a copy of the GNU Affero General Public License
+.\" along with this program.  If not, see <https://www.gnu.org/licenses/>.
+.\"
+.Dd $Mdocdate: August 5 2019 $
+.Dt DEADMAN 1
+.Os
+.Sh NAME
+.Nm deadman
+.Nd software deadman's switch
+.Sh SYNOPSIS
+.Nm deadman
+time
+cmd
+.Op Ar arg ...
+.Sh DESCRIPTION
+.Nm deadman
+is a software deadman's switch.
+It sits as a sleeping daemon, then runs a command at the specified time.
+.Pp
+Stop the switch by sending the
+.Dv SIGKILL
+signal, since
+.Nm deadman
+ignores all possible signals and
+.Dv SIGKILL
+cannot be ignored.
+.Pp
+Time is in UTC, parsed in the format
+.Dq YYYY-MM-DDThh:mm:ss
+similar to ISO 8601.
+For example
+.Sm off
+.Dq 2019-08-05T15:35:00
+\&.
+.Sm on
+.Pp
+Command must be an absolute path starting with
+.Sm off
+.Sq /
+\&.
+.Sm on
+.Sh NOTES
+While
+.Nm deadman
+tries to position itself to avoid interruption by the system, it
+does not go to the extend that some malware does, like modifying the system to
+avoid detection.
+.Pp
+Be ware that:
+.Bl -bullet -width i
+.It
+On Linux, if
+.Em /proc
+is not mounted with
+.Dq hidepid=2
+unprivileged users may see the time and command
+.Nm deadman
+will run.
+.It
+If the OS does not have DoS limits in place, it could be possible for other
+processes to consume all system resources and
+.Nm deadman
+would be unable to execute the command.
+In such a scenario, the OS may automatically kill
+.Nm deadman
+to reappropriate resources.
+.It
+When the system loses power
+.Pq through shutdown, pulling the cord, etc
+.Nm deadman
+will be killed with everything else.
+.It
+Users such as
+.Em root
+or those in the wheel group may kill or alter
+.Sm off
+.Nm deadman No 's
+.Sm on
+execution.
+.El
+.Sh AUTHORS
+.Nm deadman
+was written by
+.An Esote
+.Sh COPYRIGHT
+Copyright (c) 2019 Esote.
+There is NO warranty.
+You may redistribute this software under the terms of the GNU Affero General
+Public License.
+For more information, see the LICENSE file.
