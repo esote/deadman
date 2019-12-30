@@ -14,7 +14,7 @@
 .\" You should have received a copy of the GNU Affero General Public License
 .\" along with this program.  If not, see <https://www.gnu.org/licenses/>.
 .\"
-.Dd $Mdocdate: August 5 2019 $
+.Dd $Mdocdate: December 29 2019 $
 .Dt DEADMAN 1
 .Os
 .Sh NAME
@@ -42,24 +42,17 @@ Time is in UTC, parsed in the format
 .Dq YYYY-MM-DDThh:mm:ss
 similar to ISO 8601.
 For example
-.Sm off
-.Dq 2019-08-05T15:35:00
-\&.
-.Sm on
+.Dq 2019-08-05T15:35:00 .
 .Pp
 Command must be an absolute path starting with
-.Sm off
-.Sq /
-\&.
-.Sm on
+.Sq / .
 .Sh NOTES
 While
 .Nm deadman
-tries to position itself to avoid interruption by the system, it
-does not go to the extend that some malware does, like modifying the system to
-avoid detection.
+tries to position itself to avoid interruption by the system, it does not go to
+the extent that some malware does, like modifying the system to avoid detection.
 .Pp
-Be ware that:
+Be aware that:
 .Bl -bullet -width i
 .It
 On Linux, if
@@ -79,22 +72,19 @@ In such a scenario, the OS may automatically kill
 to reappropriate resources.
 .It
 When the system loses power
-.Pq through shutdown, pulling the cord, etc
 .Nm deadman
 will be killed with everything else.
 .It
 Users such as
 .Em root
 or those in the wheel group may kill or alter
-.Sm off
-.Nm deadman No 's
-.Sm on
+.Nm deadman Ns 's
 execution.
 .El
 .Sh AUTHORS
 .Nm deadman
 was written by
-.An Esote
+.An Esote .
 .Sh COPYRIGHT
 Copyright (c) 2019 Esote.
 There is NO warranty.

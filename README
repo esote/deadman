@@ -31,8 +31,8 @@ NOTES
 	unable to execute the command. In such a scenario, the OS may
 	automatically kill deadman to reappropriate resources.
 
-	* When the system loses power (through shutdown, pulling the cord, etc)
-	deadman will be killed with everything else.
+	* When the system loses power deadman will be killed with everything
+	else.
 
 	* Users such as root or those in the wheel group may kill or alter
 	deadman's execution.
